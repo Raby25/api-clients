@@ -25,7 +25,8 @@ public class ClientService {
                 saved.getPrenom(),
                 saved.getEmail(),
                 saved.getTel());
-        rabbitTemplate.convertAndSend("clients.exchange", "client.created", dto);
+        rabbitTemplate.convertAndSend("clients.exchange", (String) "client.created", dto,
+                (org.springframework.amqp.core.MessagePostProcessor) message -> message);
         return saved;
     }
 
@@ -47,7 +48,8 @@ public class ClientService {
                 updated.getPrenom(),
                 updated.getEmail(),
                 updated.getTel());
-        rabbitTemplate.convertAndSend("clients.exchange", "client.updated", dto);
+        rabbitTemplate.convertAndSend("clients.exchange", (String) "client.updated", dto,
+                (org.springframework.amqp.core.MessagePostProcessor) message -> message);
         return updated;
     }
 
@@ -62,7 +64,8 @@ public class ClientService {
                 existing.getPrenom(),
                 existing.getEmail(),
                 existing.getTel());
-        rabbitTemplate.convertAndSend("clients.exchange", "client.deleted", dto);
+        rabbitTemplate.convertAndSend("clients.exchange", (String) "client.deleted", dto,
+                (org.springframework.amqp.core.MessagePostProcessor) message -> message);
     }
 
     public List<Client> all() {
@@ -72,5 +75,9 @@ public class ClientService {
     public Client get(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
+    }
+
+    public Client findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 }

@@ -8,4 +8,4 @@ COPY wait-for-it.sh wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 
 # Entrypoint unique : attendre PostgreSQL et RabbitMQ
-ENTRYPOINT ["sh", "-c", "./wait-for-it.sh db:5432 --timeout=60 --strict -- ./wait-for-it.sh rabbitmq:5672 --timeout=60 --strict -- java -jar api-clients-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["sh", "-c", "./wait-for-it.sh clients-db:5432 --timeout=60 --strict -- ./wait-for-it.sh rabbitmq:5672 --timeout=60 --strict -- java -jar api-clients-0.0.1-SNAPSHOT.jar"]
